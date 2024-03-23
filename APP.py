@@ -115,7 +115,28 @@ def newUser():
 
 from flask import redirect, url_for
 
+@app.route('/edit-task', methods=['POST'])
+def editTask():
+    try:
+        # Obtén los datos del formulario
+        task_id = request.form['id']
+        new_title = request.form['title']
+        new_description = request.form['description']
 
+        # Realiza la lógica para editar la tarea en tu base de datos
+        cur = mysql.connection.cursor()
+        sql = "UPDATE tasks SET title = %s, description = %s WHERE id = %s"
+        data = (new_title, new_description, task_id)
+        cur.execute(sql, data)
+        mysql.connection.commit()
+        cur.close()
+
+        # Redirige de vuelta a la página de tareas después de la edición
+        return redirect(url_for('tasks'))
+
+    except Exception as e:
+        # Devuelve una respuesta de error en formato JSON
+        return jsonify(success=False, message=str(e))
 
 if __name__ == '__main__':
     app.run(debug=True)
