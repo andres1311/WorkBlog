@@ -1,0 +1,15 @@
+.navbar {
+    background-color: #212529 !important;
+    padding: 16px 0px ;
+    font: 16px "roboto slab";
+}
+.navbar-brand {
+    color: #ffc800 !important;
+    font: 20px arial, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif;
+    margin: 0px 16px 0px 0px;
+    padding: 5px 0px;
+}
+.navbar span {
+    color: #ffc800 !important;
+}
+
