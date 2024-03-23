@@ -137,6 +137,79 @@ def editTask():
     except Exception as e:
         # Devuelve una respuesta de error en formato JSON
         return jsonify(success=False, message=str(e))
+    
+    @app.route("/delete-task", methods=["POST"])
+def deleteTask():
+    cur = mysql.connection.cursor()
+    id = request.form['id']
+    sql = "DELETE FROM tasks WHERE id = %s"
+    data = (id,)
+    cur.execute(sql, data)
+    mysql.connection.commit()
+    return redirect(url_for('tasks'))
+
+# Ruta para generar y descargar el PDF de las tareas
+@app.route('/generate-pdf')
+def generate_pdf():
+    if 'email' not in session:
+        return redirect(url_for('home'))
+
+    email = session['email']
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT * FROM tasks WHERE email = %s", [email])
+    tasks = cur.fetchall()
+
+    if not tasks:
+        return render_template('tasks.html', message="No hay tareas disponibles.")
+
+    response = make_response()
+    response.headers['Content-Disposition'] = 'attachment; filename=tareas.pdf'
+    response.headers['Content-Type'] = 'application/pdf'
+
+    buffer = response.stream
+    c = canvas.Canvas(buffer, pagesize=letter)
+
+    # Agregar el encabezado "WorkBlog" centrado en la página
+    c.setFont("Helvetica-Bold", 16)
+    c.drawCentredString(300, 750, "WorkBlog")
+
+    # Obtener el nombre y apellido del usuario
+    name = session['name']
+    surnames = session['surnames']
+
+    # Contar el número de tareas creadas
+    num_tasks = len(tasks)
+
+    # Agregar información del usuario y número de tareas creadas
+    c.setFont("Helvetica", 12)
+    c.drawString(100, 730, f"Bienvenido/a {name} {surnames}, tienes {num_tasks} tareas creadas.")
+
+    # Comenzar a dibujar las tareas
+    y = 700
+
+    for task in tasks:
+        # Dibujar el rectángulo
+        c.rect(75, y-60, 470, 70, stroke=1, fill=0)
+
+        # Asegúrate de dibujar el texto dentro del rectángulo
+        c.drawString(100, y, f"Título: {task[2]}")
+        y -= 20
+        c.drawString(100, y, f"Descripción: {task[3]}")
+        y -= 20
+        c.drawString(100, y, f"Fecha: {task[4]}")
+
+        # Espacio adicional antes de la siguiente tarea
+        y -= 40
+
+        # Verificar si necesitas una nueva página
+        if y < 100:
+            c.showPage()
+            y = 750  # Restablecer la posición y para la nueva página
+
+    c.showPage()
+    c.save()
+
+    return response
 
 if __name__ == '__main__':
     app.run(debug=True)
