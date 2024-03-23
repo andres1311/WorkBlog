@@ -71,6 +71,22 @@ def logout():
     session.clear()
     return redirect(url_for('home'))
 
+@app.route('/new-task', methods=['POST'])
+def newTask():
+    title = request.form['title']
+    description = request.form['description']
+    email = session['email']
+    d = datetime.now()
+    dateTask = d.strftime("%Y-%m-%d %H:%M:%S")
+
+    if title and description and email:
+        cur = mysql.connection.cursor()
+        sql = "INSERT INTO tasks (email, title, description, date_task) VALUES (%s, %s, %s, %s)"
+        data = (email, title, description, dateTask)
+        cur.execute(sql, data)
+        mysql.connection.commit()
+    return redirect(url_for('tasks'))
+
 from flask import flash
 
 @app.route('/new-user', methods=['POST'])
