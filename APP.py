@@ -137,8 +137,8 @@ def editTask():
     except Exception as e:
         # Devuelve una respuesta de error en formato JSON
         return jsonify(success=False, message=str(e))
-    
-    @app.route("/delete-task", methods=["POST"])
+
+@app.route("/delete-task", methods=["POST"])
 def deleteTask():
     cur = mysql.connection.cursor()
     id = request.form['id']
@@ -182,7 +182,7 @@ def generate_pdf():
 
     # Agregar información del usuario y número de tareas creadas
     c.setFont("Helvetica", 12)
-    c.drawString(100, 730, f"Bienvenido/a {name} {surnames}, tienes {num_tasks} tareas creadas.")
+    c.drawString(100, 730, f"Buen Dia {name} {surnames}, tienes {num_tasks} tareas creadas.")
 
     # Comenzar a dibujar las tareas
     y = 700

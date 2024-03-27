@@ -12,4 +12,37 @@
 .navbar span {
     color: #ffc800 !important;
 }
+.footer {
+    background-color: #212529;
+    color: #ffc800; /* Cambiar este color según tu preferencia */
+    margin-top: auto;
+}
+
+.footer .col-lg-4.text-lg-end a {
+    color: #ffc800; /* Cambiar este color según tu preferencia */
+}
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+.footer a {
+    color: #ffc800; /* Cambiar este color según tu preferencia */
+}
+
+body {
+    background-image: url('https://w.wallha.com/ws/4/beWo2wsZ.png'); /* URL directa de la imagen de fondo */
+    background-size: cover; /* Ajustar la imagen al tamaño del cuerpo */
+    background-repeat: no-repeat; /* Evitar que la imagen se repita */
+}
+.custom-background {
+    background-color: #212529; /* Color de fondo deseado */
+    border: 2px solid #ffc80081;
+}
+
+.card {
+    margin-bottom: 20px; /* Espacio entre cada tarjeta */
+}
+
+
 
